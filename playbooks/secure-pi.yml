@@ -1,0 +1,10 @@
+---
+- name: Secure Raspbery pi
+  hosts: pi
+  remote_user: pi
+
+  tasks:
+  - name: test
+    file:
+      path: /tmp/test
+      state: directory
