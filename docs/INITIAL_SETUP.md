@@ -17,6 +17,15 @@ You should be able to log into your raspber pi! Make a note of this ip address a
 sudo vim /etc/ansible/hosts
 ```
 
+Add a line like this:
+```
+pi ansible_host=<IP-ADDRESS> ansible_user=pi
+```
+
+This is adding an alias of `pi` to our hosts. Ansible should automatically find the ssh keys, so no need to worry about that.
+
+
+
 ## Securing your raspbery pi
 
 I would reccomend moving away from username/password to ssh key based authentication.
