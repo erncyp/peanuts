@@ -1,9 +1,0 @@
----
-- name: Secure Raspbery pi
-  hosts: pi
-
-  tasks:
-  - name: test
-    file:
-      path: /tmp/test
-      state: directory
