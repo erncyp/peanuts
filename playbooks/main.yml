@@ -1,0 +1,41 @@
+---
+# mount any drives you find
+- name: Mount hard drives
+  hosts: pi
+  become: true
+  # gather_facts: true
+  vars_files:
+    - ../vars/vars.yml
+
+  tasks:
+  - name: create mount folders
+    file:
+      path: "{{ item.value.path }}"
+      state: directory
+    loop: "{{ lookup('dict', mount_by_labels) }}"
+
+  - name: Mount hard drives
+    ansible.posix.mount:
+      path: "{{ item.value.path }}"
+      src: "LABEL={{ item.value.label }}"
+      fstype: "{{ item.value.fstype }}"
+      state: mounted
+    loop: "{{ lookup('dict', mount_by_labels) }}"
+
+  ## Start installing MergeFS
+  - name: Download mergefs tar
+    get_url:
+      url: https://github.com/trapexit/mergerfs/releases/download/2.32.6/mergerfs-2.32.6-1.el7.aarch64.rpm
+      # dest: "{{ ansible_env.HOME }}/mergefs"
+      dest: "/tmp/mergerfs-2.32.6-1.el7.aarch64.rpm"
+
+  - name: create mergefs tmp folder
+    file:
+      path: "/tmp/mergerfs"
+      state: directory
+
+  - name: unpack mergefs tar
+    ansible.builtin.unarchive:
+      src: "/tmp/mergerfs-2.32.6-1.el7.aarch64.rpm"
+      dest: "/tmp/mergerfs"
+      remote_src: true

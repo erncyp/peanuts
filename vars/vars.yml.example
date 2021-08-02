@@ -1,0 +1,12 @@
+---
+mount_by_labels:
+  hdd1:
+    label: hdd1
+    path: /mnt/hdd1
+    fstype: ext4
+    state: present
+  hdd2:
+    label: hdd2
+    path: /mnt/hdd2
+    fstype: ext4
+    state: present

@@ -9,3 +9,10 @@ This project is inspired by the reddit posts [[1]](https://www.reddit.com/r/rasp
 ## Secure your Raspberry Pi
 
 First things first secure your raspberry pi. You can use the ansible playbooks from [Securing-your-Raspberry-Pi-with-Ansible](https://github.com/tomgelbling/Securing-your-Raspberry-Pi-with-Ansible) repo. This repo automates the [offical security guidance](https://www.raspberrypi.org/documentation/configuration/security.md) which you can do manually if you like.
+
+
+# Dependencies
+
+```
+ansible-galaxy collection install ansible.posix
+```
