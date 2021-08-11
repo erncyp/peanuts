@@ -16,3 +16,11 @@ First things first secure your raspberry pi. You can use the ansible playbooks f
 ```
 ansible-galaxy collection install ansible.posix
 ```
+
+# Disks
+
+Run this to see the disks labels and update vars.yml
+
+```
+lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL
+```

@@ -22,20 +22,20 @@
       state: mounted
     loop: "{{ lookup('dict', mount_by_labels) }}"
 
-  ## Start installing MergeFS
-  - name: Download mergefs tar
-    get_url:
-      url: https://github.com/trapexit/mergerfs/releases/download/2.32.6/mergerfs-2.32.6-1.el7.aarch64.rpm
-      # dest: "{{ ansible_env.HOME }}/mergefs"
-      dest: "/tmp/mergerfs-2.32.6-1.el7.aarch64.rpm"
+  ## Start installing MergerFS
+  - name: Clone latest version (2.32.6)
+    git:
+      repo: https://github.com/trapexit/mergerfs.git
+      dest: /src/mergerfs
+      version: 2.32.6
 
-  - name: create mergefs tmp folder
-    file:
-      path: "/tmp/mergerfs"
-      state: directory
+  - name: install mergerfs
+    shell: sudo make -C /src/mergerfs/ install
+    register: make
+    become: true
+    # when <mergerfs -v doesnt return 2.32.6>
 
-  - name: unpack mergefs tar
-    ansible.builtin.unarchive:
-      src: "/tmp/mergerfs-2.32.6-1.el7.aarch64.rpm"
-      dest: "/tmp/mergerfs"
-      remote_src: true
+  - debug: var=make.stdout_lines
+
+  # using  this link https://zackreed.me/mergerfs-another-good-option-to-pool-your-snapraid-disks/
+  # /mnt/data/* /storage fuse.mergerfs allow_other,direct_io,use_ino,category.create=lfs,moveonenospc=true,minfreespace=20G,fsname=mergerfsPool 0 0
