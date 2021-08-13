@@ -4,9 +4,17 @@ mount_by_labels:
     label: hdd1
     path: /mnt/hdd1
     fstype: ext4
-    state: present
   hdd2:
     label: hdd2
     path: /mnt/hdd2
     fstype: ext4
-    state: present
+  hdd3:
+    label: hdd3
+    path: /mnt/pd-hdd3
+    fstype: ext4
+mergerfs_mounts:
+  src: /mnt/hdd*
+  path: /mnt/pool1
+  fstype: fuse.mergerfs
+  opts: "allow_other,direct_io,use_ino,category.create=lfs,moveonenospc=true,minfreespace=20G,fsname=mergerfsPool"
+

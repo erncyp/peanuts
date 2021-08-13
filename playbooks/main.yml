@@ -31,11 +31,39 @@
 
   - name: install mergerfs
     shell: sudo make -C /src/mergerfs/ install
-    register: make
+    register: make_mergerfs
     become: true
     # when <mergerfs -v doesnt return 2.32.6>
 
-  - debug: var=make.stdout_lines
+  - debug: var=make_mergerfs.stdout_lines
 
-  # using  this link https://zackreed.me/mergerfs-another-good-option-to-pool-your-snapraid-disks/
-  # /mnt/data/* /storage fuse.mergerfs allow_other,direct_io,use_ino,category.create=lfs,moveonenospc=true,minfreespace=20G,fsname=mergerfsPool 0 0
+  - name: Mount mergerfs
+    ansible.posix.mount:
+      path: "{{ mergerfs_mounts.path}}"
+      src: "{{ mergerfs_mounts.src }}"
+      fstype: "{{ mergerfs_mounts.fstype }}"
+      opts: "{{ mergerfs_mounts.opts }}"
+      state: mounted
+    # loop: "{{ query('dict', mergerfs_mounts) }}"
+
+
+  ## Start installing Snapraid
+  - name: Clone latest version (v11.5)
+    git:
+      repo: https://github.com/amadvance/snapraid.git
+      dest: /src/snapraid
+      version: v11.5
+# Do I need to install autconf automake libtool ?
+
+  - name: install snapraid
+    shell:
+      cmd: |
+        sudo ./autogen.sh
+        sudo ./configure
+        sudo make
+      chdir: /src/snapraid/
+    register: make_snapraid
+    become: true
+    # when <snapraid -v doesnt return 11.5>
+
+  - debug: var=make_snapraid.stdout_lines
