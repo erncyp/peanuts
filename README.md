@@ -2,13 +2,15 @@
 
 Light-weight raspbery pi nas
 
-*This repo is still in development.* Feel free to contribute. See the [roadmap](ROADMAP.md) for what has been done and what is yet to be done.
+**This repo is still in development.** Feel free to contribute. See the [roadmap](ROADMAP.md) for what has been done and what is yet to be done.
 
 ## The idea
 
 This project is inspired by the reddit posts [[1]](https://www.reddit.com/r/raspberry_pi/comments/d1hmop/made_a_raspberry_pi_4_nas_automated_download/)[[2]](https://www.reddit.com/r/raspberry_pi/comments/kdy806/my_pinas_is_growing/) by user [u/Albert_street](https://www.reddit.com/user/Albert_street) where a raspbery pi 4 is connected to a USB hub and many external drives are attached to the USB hub. The hub powers the drives, and the pi has relatively quick read/write via the USB3 ports. This repo aims create something similar using ansible scripts.
 
 ![peanuts physical setup](docs/peanuts.png)
+
+Behind the scenes, you have *mergerfs* to join all hard drives to work as one and *snapraid* to create a "raid" array.
 
 
 ## Installation
@@ -34,7 +36,7 @@ ansible-galaxy collection install ansible.posix
 ```
 
 
-## Create vars.yml
+### Create vars.yml
 
 Copy the example over so we can start populating it:
 
