@@ -1,0 +1,39 @@
+---
+# mount any drives you find
+- name: Mount hard drives
+  hosts: pi
+  become: true
+  # gather_facts: true
+  vars_files:
+    - ../vars/samba_vars.yml
+
+- name: Create system level users & prevent non-root users from login into the system using nologin shell
+  user:
+    name: "{{ item.value.name }}"
+    password: "{{ item.value.password | password_hash('sha512') }}"
+    shell: /usr/sbin/nologin
+    update_password: on_create
+  loop: "{{ lookup('dict', samba_users) }}"
+
+
+- name: Create samba users
+  user:
+    name: "{{ item.value.name }}"
+    password: "{{ item.value.password }}"
+  loop: "{{ lookup('dict', samba_users) }}"
+
+
+- name: Create samba shares
+  samba_shares:
+    name: "{{ item.value.name }}"
+    path: "{{ item.value.path }}"
+    read_only: "{{ item.value.read_only }}"
+    guest_ok: "{{ item.value.guest_ok }}"
+    valid_users: "{{ item.value.valid_users }}"
+    write_list: "{{ item.value.write_list }}"
+  loop: "{{ lookup('dict', samba_shares) }}"
+
+
+
+
+

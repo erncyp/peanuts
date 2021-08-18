@@ -1,0 +1,21 @@
+samba_users:
+  - name: alice
+    password: ecila
+  - name: bob
+    password: bob
+  - name: charlie
+    password: eilrahc
+
+samba_shares:
+  - name: alice
+    path: /mnt/pool1/alice
+    read_only: no
+    guest_ok: no
+    valid_users: alice
+    write_list: alice
+  - name: bob
+    path: /mnt/pool1/bob
+    read_only: no
+    guest_ok: no
+    valid_users: bob
+    write_list: bob
