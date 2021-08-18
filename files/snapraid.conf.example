@@ -1,0 +1,9 @@
+parity /mnt/pd-hdd3/snapraid.parity
+content /var/snapraid/snapraid.content
+content /mnt/hdd1/snapraid.content
+content /mnt/hdd2/snapraid.content
+data d1 /mnt/hdd1/
+data d2 /mnt/hdd2/
+
+exclude /root_folder_example/
+exclude subfolder_example/

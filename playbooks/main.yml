@@ -53,17 +53,34 @@
       repo: https://github.com/amadvance/snapraid.git
       dest: /src/snapraid
       version: v11.5
-# Do I need to install autconf automake libtool ?
 
+  # Not sure if all of these are needed
+  - name: Install dependencies (to build) snapraid
+    apt:
+      pkg:
+        - autoconf
+        - automake
+        - libtool
+    become: true
+
+  # there was a make check, which I am skipping.
   - name: install snapraid
     shell:
       cmd: |
         sudo ./autogen.sh
         sudo ./configure
         sudo make
+        sudo make install
       chdir: /src/snapraid/
     register: make_snapraid
     become: true
     # when <snapraid -v doesnt return 11.5>
 
   - debug: var=make_snapraid.stdout_lines
+
+  ## Configure snapraid
+  - name: Create snapraid configuration file
+    copy:
+      src: "../files/snapraid.conf"
+      dest: "/etc/snapraid.conf"
+    become: true

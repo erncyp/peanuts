@@ -54,3 +54,53 @@ lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL
 
 Note that in the example, we name one drive with the prefix `pd-` for parity drive. Snapraid requires at least one parity drive and two data drives. In mergerfs, we merge only the data drives, not the parity one. Snapraid requires that the parity should be as large as the largest drive in the pool.
 
+### Configure snapraid
+
+
+```
+cp files/snapraid.conf.example files/snapraid.conf
+```
+
+In this file, pick which disks you want it to be your parity and which ones you want it to be your content. I reccomend excluding some non-important folders. This can be at root level or for any subroot level. See snapraid documentation for more configuration options.
+
+
+## Run ansible script
+
+Create an inventory file with contents like this:
+
+```
+[pi]
+
+<Your raspberry pis IP address>
+```
+
+The installation and setup of mergerfs and snapraid happen after running:
+
+```
+ansible-playbook -i inventory playbooks/main.yml --ask-become-pass
+```
+
+This will ask for the sudo password before it runs the scripts.
+
+Currently, you still need to ssh into the system and run snapraid snyc manually. You probably want to set the sync to happen regularly via a cron job.
+
+
+# Setting up samba
+
+We use an existing role to do this for us. Run:
+
+```
+ansible-galaxy install bertvv.samba
+```
+
+Set up your configurations:
+
+```
+cp vars/samba.yml.example vars/samba.yml
+```
+
+Here you will specify the users and their passwords (this will be both their system and samba passwords), as well as the samba shares, and who can access which share. You can also create groups, but I will not do that here.
+
+```
+ansible-playbook -i inventory playbooks/samba.yml --ask-become-pass
+```
