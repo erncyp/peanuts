@@ -1,3 +1,4 @@
+samba_shares_root: /mnt/pool1
 samba_users:
   - name: alice
     password: ecila
