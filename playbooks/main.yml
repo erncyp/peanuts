@@ -22,6 +22,11 @@
       state: mounted
     loop: "{{ lookup('dict', mount_by_labels) }}"
 
+  - name: Install git
+    apt:
+      pkg: git
+    become: true
+
   ## Start installing MergerFS
   - name: Clone latest version (2.32.6)
     git:

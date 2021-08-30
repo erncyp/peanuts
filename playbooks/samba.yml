@@ -1,21 +1,20 @@
 ---
 # mount any drives you find
-- name: Mount hard drives
+- name: Set up samba
   hosts: pi
   become: true
   # gather_facts: true
   vars_files:
     - ../vars/samba_vars.yml
-  become: true
   pre_tasks:
 
   - name: Create system level users & prevent non-root users from login into the system using nologin shell
     user:
-      name: "{{ item.value.name }}"
-      password: "{{ item.value.password | password_hash('sha512') }}"
+      name: "{{ item.name }}"
+      password: "{{ item.password | password_hash('sha512') }}"
       shell: /usr/sbin/nologin
       update_password: on_create
-    loop: "{{ lookup('dict', samba_users) }}"
+    loop: "{{ lookup('list', samba_users) }}"
   roles:
     - bertvv.samba
 
