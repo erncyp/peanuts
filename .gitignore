@@ -2,3 +2,4 @@ inventory
 vars.yml
 samba_vars.yml
 snapraid.conf
+smb.conf

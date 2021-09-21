@@ -15,8 +15,29 @@
       shell: /usr/sbin/nologin
       update_password: on_create
     loop: "{{ lookup('list', samba_users) }}"
-  roles:
-    - bertvv.samba
+  - name: Install samba
+    apt:
+      pkg:
+        - samba
+        - samba-common-bin
+    become: true
 
+  - name: Create folder for samba config
+    file:
+      path: "/etc/samba/"
+      state: directory
+
+  ## Configure snapraid
+  - name: Copy samba configuration file
+    copy:
+      src: "../files/smb.conf"
+      dest: "/etc/samba/smb.conf"
+    become: true
+
+  - name: Restart samba so it picks up changes
+    ansible.builtin.systemd:
+      state: restarted
+      daemon_reload: yes
+      name: smbd
 
 
